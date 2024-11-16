@@ -1,5 +1,7 @@
 package main
 
+import "cass/src/cli"
+
 func main() {
-	println("Hello, world!")
+	cli.Init()
 }
