@@ -19,6 +19,9 @@ func GetCommitType() (string, error) {
 		{Text: "perf", Note: "Performance improvements"},
 		{Text: "test", Note: "Adding or updating tests"},
 		{Text: "chore", Note: "Other changes (e.g., build or tool updates)"},
+		{Text: "build", Note: "Changes that affect the build system or dependencies"},
+		{Text: "ci", Note: "Continuous integration related changes"},
+		{Text: "revert", Note: "Reverts a previous commit"},
 	}
 
 	commitType, err := prompt.New().
