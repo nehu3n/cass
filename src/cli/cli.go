@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v2"
 )
 
@@ -13,10 +14,23 @@ func Init() {
 		Usage: "Advanced commits assistant.",
 		Action: func(*cli.Context) error {
 			commit, err := initAction()
-			println(commit)
 
 			if err != nil {
 				return err
+			}
+
+			confirm, err := ConfirmCommitMessage(commit)
+
+			if err != nil {
+				return err
+			}
+
+			if confirm {
+				println(commit)
+				// TODO: push the commit
+			} else {
+				red := color.New(color.FgRed).SprintFunc()
+				println(red("[❌] Commit cancelled"))
 			}
 
 			return nil

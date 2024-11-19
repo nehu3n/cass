@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/cqroot/prompt"
 	"github.com/cqroot/prompt/choose"
 	"github.com/cqroot/prompt/input"
 	"github.com/cqroot/prompt/write"
+	"github.com/fatih/color"
 )
 
 func GetCommitType() (string, error) {
@@ -186,4 +188,29 @@ func GetCommitWIP() (bool, error) {
 	}
 
 	return true, nil
+}
+
+func ConfirmCommitMessage(commitMessage string) (bool, error) {
+	lines := strings.Split(commitMessage, "\n")
+	maxLength := 0
+	for _, line := range lines {
+		if len(line) > maxLength {
+			maxLength = len(line)
+		}
+	}
+
+	line := color.New(color.FgCyan).Sprint(strings.Repeat("-", maxLength))
+
+	fmt.Printf("\n%s\n\n%s\n\n%s\n\n", line, commitMessage, line)
+
+	confirm, err := prompt.New().Ask("Are you sure you want to commit with this message?").Choose(
+		[]string{"Yes", "No"},
+		choose.WithTheme(choose.ThemeLine),
+		choose.WithKeyMap(choose.HorizontalKeyMap),
+	)
+	if err != nil {
+		return false, err
+	}
+
+	return confirm == "Yes", nil
 }
