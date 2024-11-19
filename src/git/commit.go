@@ -1,10 +1,13 @@
 package git
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type CommitMessage struct {
 	Emoji bool
-	Type string
+	Type  string
 	Scope string
 	Title string
 	Wip   bool
@@ -57,9 +60,11 @@ func BuildCommitMessage(commit CommitMessage) string {
 	}
 
 	if commit.TicketRef != "" {
-		commitMessage += fmt.Sprintf("\n\nRelated to: %s", commit.TicketRef)
 		if commit.WordRef != "" {
-			commitMessage += fmt.Sprintf(" (%s)", commit.WordRef)
+			capitalizedWordRef := strings.ToUpper(string(commit.WordRef[0])) + commit.WordRef[1:]
+			commitMessage += fmt.Sprintf("\n\n%s %s", capitalizedWordRef, commit.TicketRef)
+		} else {
+			commitMessage += fmt.Sprintf("\n\nRelated to: %s", commit.TicketRef)
 		}
 	}
 
