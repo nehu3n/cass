@@ -7,6 +7,8 @@ import (
 
 	"github.com/cqroot/prompt"
 	"github.com/cqroot/prompt/choose"
+	"github.com/cqroot/prompt/input"
+	"github.com/cqroot/prompt/write"
 )
 
 func GetCommitType() (string, error) {
@@ -46,7 +48,7 @@ func GetCommitScope() (string, error) {
 	for i, savedScope := range savedScopes {
 		if i == 0 {
 			savedScopesStr += fmt.Sprintf("%s, ", savedScope)
-		} else if i == len(savedScopes) {
+		} else if i == len(savedScopes)-1 {
 			savedScopesStr += fmt.Sprintf(" %s", savedScope)
 		} else {
 			savedScopesStr += fmt.Sprintf(" %s,", savedScope)
@@ -88,7 +90,7 @@ func GetCommitTitle() (string, error) {
 }
 
 func GetCommitBody() (string, error) {
-	commitBody, err := prompt.New().Ask("Do you want to add a detailed description of the change? (press Enter to skip)").Write("")
+	commitBody, err := prompt.New().Ask("Do you want to add a detailed description of the change?").Write("", write.WithHelp(true))
 
 	if err != nil {
 		return "", err
@@ -98,20 +100,21 @@ func GetCommitBody() (string, error) {
 }
 
 func GetCommitTicket() (string, string, error) {
-	commitRef, err := prompt.New().Ask("Is this commit related to an issue or ticket? (example: #123)").Input("")
+	commitRef, err := prompt.New().Ask("Is this commit related to an issue or ticket? (example: #123)").Input("", input.WithValidateFunc(func(input string) error {
+		validReference := regexp.MustCompile(`^#\d+$`)
+		if input != "" && !validReference.MatchString(input) {
+			return errors.New("invalid issue/ticket reference format (use #123)")
+		}
+
+		if input == "" {
+			return nil
+		}
+
+		return nil
+	}))
 	if err != nil {
 		return "", "", err
 	}
-
-	validReference := regexp.MustCompile(`^#\d+$`)
-	if commitRef != "" && !validReference.MatchString(commitRef) {
-		return "", "", errors.New("invalid issue/ticket reference format (use #123)")
-	}
-
-	if commitRef == "" {
-		return "", "", nil
-	}
-
 	wordRef, err := prompt.New().Ask("What type of relationship does this commit have with the issue/ticket?").
 		AdvancedChoose([]choose.Choice{
 			{Text: "closes", Note: "Automatically closes the issue when merged."},
