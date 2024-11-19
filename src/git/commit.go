@@ -3,18 +3,18 @@ package git
 import "fmt"
 
 type CommitMessage struct {
-	emoji bool
-	_type string
-	scope string
-	title string
-	wip   bool
+	Emoji bool
+	Type string
+	Scope string
+	Title string
+	Wip   bool
 
-	body      string
-	ticketRef string
-	wordRef   string
+	Body      string
+	TicketRef string
+	WordRef   string
 
-	breakingChange      bool
-	breakingDescription string
+	BreakingChange      bool
+	BreakingDescription string
 }
 
 var emojiTypes = map[string]string{
@@ -34,37 +34,37 @@ var emojiTypes = map[string]string{
 func BuildCommitMessage(commit CommitMessage) string {
 	commitMessage := ""
 
-	if commit.emoji {
-		commitMessage += fmt.Sprintf("%s ", emojiTypes[commit._type])
+	if commit.Emoji {
+		commitMessage += fmt.Sprintf("%s ", emojiTypes[commit.Type])
 	}
 
-	commitMessage += commit._type
+	commitMessage += commit.Type
 
-	if commit.scope != "" {
-		commitMessage += fmt.Sprintf("(%s): ", commit.scope)
+	if commit.Scope != "" {
+		commitMessage += fmt.Sprintf("(%s): ", commit.Scope)
 	} else {
 		commitMessage += ": "
 	}
 
-	commitMessage += commit.title
+	commitMessage += commit.Title
 
-	if commit.wip {
+	if commit.Wip {
 		commitMessage += " [WIP]"
 	}
 
-	if commit.body != "" {
-		commitMessage += fmt.Sprintf("\n\n%s", commit.body)
+	if commit.Body != "" {
+		commitMessage += fmt.Sprintf("\n\n%s", commit.Body)
 	}
 
-	if commit.ticketRef != "" {
-		commitMessage += fmt.Sprintf("\n\nRelated to: %s", commit.ticketRef)
-		if commit.wordRef != "" {
-			commitMessage += fmt.Sprintf(" (%s)", commit.wordRef)
+	if commit.TicketRef != "" {
+		commitMessage += fmt.Sprintf("\n\nRelated to: %s", commit.TicketRef)
+		if commit.WordRef != "" {
+			commitMessage += fmt.Sprintf(" (%s)", commit.WordRef)
 		}
 	}
 
-	if commit.breakingChange {
-		commitMessage += fmt.Sprintf("\n\nBREAKING CHANGE: %s", commit.breakingDescription)
+	if commit.BreakingChange {
+		commitMessage += fmt.Sprintf("\n\nBREAKING CHANGE: %s", commit.BreakingDescription)
 	}
 
 	return commitMessage
