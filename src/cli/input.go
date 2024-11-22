@@ -219,3 +219,17 @@ func ConfirmCommitMessage(commitMessage string) (bool, error) {
 
 	return confirm == "Yes", nil
 }
+
+func ConfirmStageChanges() (bool, error) {
+	confirm, err := prompt.New().Ask("Do you want to stage the changes?").Choose(
+		[]string{"Yes", "No"},
+		choose.WithTheme(choose.ThemeLine),
+		choose.WithKeyMap(choose.HorizontalKeyMap),
+	)
+
+	if err != nil {
+		return false, err
+	}
+
+	return confirm == "Yes", nil
+}
