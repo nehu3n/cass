@@ -117,17 +117,22 @@ func GetCommitTicket() (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	wordRef, err := prompt.New().Ask("What type of relationship does this commit have with the issue/ticket?").
-		AdvancedChoose([]choose.Choice{
-			{Text: "closes", Note: "Automatically closes the issue when merged."},
-			{Text: "fixes", Note: "Indicates the commit fixes the issue."},
-			{Text: "resolves", Note: "Marks the issue as resolved."},
-			{Text: "related to", Note: "Links the commit to the issue without closing it."},
-			{Text: "partially fixes", Note: "Shows partial progress towards resolving the issue."},
-		})
 
-	if err != nil {
-		return "", "", err
+	var wordRef = ""
+
+	if commitRef != "" {
+		wordRef, err = prompt.New().Ask("What type of relationship does this commit have with the issue/ticket?").
+			AdvancedChoose([]choose.Choice{
+				{Text: "closes", Note: "Automatically closes the issue when merged."},
+				{Text: "fixes", Note: "Indicates the commit fixes the issue."},
+				{Text: "resolves", Note: "Marks the issue as resolved."},
+				{Text: "related to", Note: "Links the commit to the issue without closing it."},
+				{Text: "partially fixes", Note: "Shows partial progress towards resolving the issue."},
+			})
+
+		if err != nil {
+			return "", "", err
+		}
 	}
 
 	return commitRef, wordRef, nil
