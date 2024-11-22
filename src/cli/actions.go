@@ -14,7 +14,7 @@ func initAction() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	commitMessage := git.BuildCommitMessage(commit)
 
 	return commitMessage, nil
@@ -23,11 +23,15 @@ func initAction() (string, error) {
 func runTUI() (git.CommitMessage, error) {
 	commit := git.CommitMessage{}
 
+	println("")
+
 	commitType, err := GetCommitType()
 	if err != nil {
 		return git.CommitMessage{}, err
 	}
 	commit.Type = commitType
+
+	println("")
 
 	scope, err := GetCommitScope()
 	if err != nil {
@@ -35,17 +39,23 @@ func runTUI() (git.CommitMessage, error) {
 	}
 	commit.Scope = scope
 
+	println("")
+
 	title, err := GetCommitTitle()
 	if err != nil {
 		return git.CommitMessage{}, err
 	}
 	commit.Title = title
 
+	println("")
+
 	body, err := GetCommitBody()
 	if err != nil {
 		return git.CommitMessage{}, err
 	}
 	commit.Body = body
+
+	println("")
 
 	ticketRef, wordRef, err := GetCommitTicket()
 	if err != nil {
@@ -54,11 +64,15 @@ func runTUI() (git.CommitMessage, error) {
 	commit.TicketRef = ticketRef
 	commit.WordRef = wordRef
 
+	println("")
+
 	useEmoji, err := GetCommitEmoji()
 	if err != nil {
 		return git.CommitMessage{}, err
 	}
 	commit.Emoji = useEmoji
+
+	println("")
 
 	breakingChange, breakingDescription, err := GetCommitBreakingChange()
 	if err != nil {
@@ -67,11 +81,15 @@ func runTUI() (git.CommitMessage, error) {
 	commit.BreakingChange = breakingChange
 	commit.BreakingDescription = breakingDescription
 
+	println("")
+
 	wip, err := GetCommitWIP()
 	if err != nil {
 		return git.CommitMessage{}, err
 	}
 	commit.Wip = wip
+
+	println("")
 
 	return commit, nil
 }
