@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"cass/src/git"
 	"log"
 	"os"
 
@@ -26,8 +27,20 @@ func Init() {
 			}
 
 			if confirm {
-				println(commit)
-				// TODO: push the commit
+				err := git.StageAllChanges()
+
+				if err != nil {
+					return err
+				}
+
+				err = git.ExecuteCommit(commit)
+				if err != nil {
+					return err
+				}
+
+				println(color.New(color.FgGreen).Sprintln("\n\n[✅] Commit successful"))
+
+				// TODO: push commit
 			} else {
 				red := color.New(color.FgRed).SprintFunc()
 				println(red("[❌] Commit cancelled"))
