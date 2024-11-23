@@ -21,7 +21,7 @@ func Init() {
 			}
 
 			if !hasChanges {
-				println(color.New(color.FgRed).Sprint("[❗] You have no changes in the working tree.\n\n"))
+				println(color.New(color.FgRed).Sprint("⚠ You have no changes in the working tree.\n\n"))
 
 				return nil
 			}
@@ -33,7 +33,7 @@ func Init() {
 			}
 
 			if !hasPendingChanges {
-				println(color.New(color.FgYellow).Sprintln("[❗] You have no changes in the stage area."))
+				println(color.New(color.FgYellow).Sprintln("⚠ You have no changes in the stage area."))
 
 				confirm, err := ConfirmStageChanges()
 
@@ -68,12 +68,11 @@ func Init() {
 					return err
 				}
 
-				println(color.New(color.FgGreen).Sprintln("\n\n[✅] Commit successful"))
+				println(color.New(color.FgGreen).Println("\n\n✅ Commit successful"))
 
 				// TODO: push commit
 			} else {
-				red := color.New(color.FgRed).SprintFunc()
-				println(red("[❌] Commit cancelled"))
+				color.New(color.FgRed).Println("❌ Commit cancelled")
 			}
 
 			return nil
